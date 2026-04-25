@@ -1,4 +1,0 @@
-1.Rimtalk_main_prompt.txt (system)
-2.Rimtalk_profile_prompt.txt (user)
-3.Rimtalk_colony_prompt.txt (user)
-4.Rimtalk_scene_prompt.txt (user)

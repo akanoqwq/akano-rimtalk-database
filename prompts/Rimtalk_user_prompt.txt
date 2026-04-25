@@ -68,3 +68,44 @@
 - {{ line }}
 {{- end }}
 {{ end -}}
+
+[殖民地状态]
+ 
+[威胁]
+{{ if eventplus_threats != "" -}}
+{{ eventplus_threats }}
+{{ else }}
+无活跃威胁。
+{{ end -}}
+
+[地图状况]
+{{ if eventplus_conditions != "" -}}
+{{ eventplus_conditions }}
+{{ else }}
+无活跃地图状况。
+{{ end -}}
+
+[活跃任务]
+{{ if eventplus_quests != "" -}}
+{{ eventplus_quests }}
+{{ else }}
+无活跃任务。
+{{ end -}}
+
+[对话触发场景]
+
+{{~ # 创建一个nl换行符变量以避免转义 ~}}
+{{~ capture nl ~}}
+{{~ "" }}
+{{~ end ~}}
+
+## 对话触发
+- 人物名单: {{ pawns }}
+- 发起人物: {{ pawn }}
+- 预期接收者: {{ recipient }}
+- 发起人物的意图: {{ ctx.DialogueType | string.split nl | array.first }}
+- 对话主题: {{ ctx.DialogueType | string.split nl | array.offset 1 | array.join " ; " }}
+
+# 世界状态
+时间: {{ hour }}时 | 日期: {{ year }} 年 {{ quadrum }} {{ day }} 日, 
+季节: {{ season }} | 天气: {{ map.weather }}
