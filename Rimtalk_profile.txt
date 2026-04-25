@@ -1,0 +1,70 @@
+[人物档案]
+**本档案中英混杂，你需要自行理解其中的英文部分。如果遇到看不懂的专业名词（如：巨人杀手，机控中枢），直接忽视这个信息，不要对看不懂的信息进行揣测**
+
+{{~ # 创建一个nl换行符变量以避免转义 ~}}
+{{~ capture nl ~}}
+{{~ "" }}
+{{~ end ~}}
+{{~ for p in pawns ~}}
+{{ p.name }} 的档案: 
+全名: {{ p.fullname }}
+性别: {{ p.gender }}
+年龄: {{ p.age }}
+阵营: {{ p.faction ~}}
+
+# {{~ p.name }} 的状态与资格:
+{{~ if p.IsColonist }}是殖民者{{ end ~}}
+{{~ if IsVisitor p }}是访客{{ end ~}}
+{{~ if IsEnemy p }}是敌人{{ end ~}}
+{{~ if p.IsSlave }}是奴隶{{ end ~}}
+{{~ if p.IsPrisoner }}是囚犯{{ end ~}}
+{{~ if IsInCombat p }}正在战斗{{ end ~}}
+{{~ if IsTalkEligible p }}{{ else }}无法言语{{ end ~}}
+{{~ profile_text = p.profile ~}}
+{{~ profile_text = profile_text | string.replace "Ideology:" "文化:" ~}}
+{{~ profile_text = profile_text | string.replace "Personality:" "人设性格:" ~}}
+{{~ profile_text = profile_text | string.replace "Skills:" "技能(0最差 - 20最好):" ~}}
+{{~ profile_text = profile_text | string.replace "Health:" "身体情况:" ~}}
+{{~ profile_text = profile_text | string.replace "Memes:" "意识形态:" ~}}
+{{~ profile_text = profile_text | string.replace "Childhood:" "童年经历:" ~}}
+{{~ profile_text = profile_text | string.replace "Adulthood:" "成年经历:" ~}}
+{{~ profile_text = profile_text | string.replace "Mood:" "情绪(0%最差-100%最好):" ~}}
+{{~ profile_text = profile_text | string.replace "Memory:" "当前心情修正:" ~}}
+{{~ # 去除前面两行重复内容，姓名和身份 ~}}
+{{- for line in (profile_text | string.split nl | array.offset 2) }}
+{{ line }}
+{{- end }}
+
+# {{ p.name }} 的当前活动: {{ p.job }}
+
+# {{ p.name }} 携带着:
+{{~ if p.inventory.innerContainer.Count > 0 ~}}
+{{- for line in p.inventory.innerContainer -}}
+{{ line.LabelCap }}
+{{ end -}}
+{{~ else ~}}
+- (未携带物品)
+{{~ end ~}}
+
+# {{ p.name }} 的需求(注:Joy: Extreme 表示娱乐极端满足):
+心情: {{ p.needs.mood.MoodString }}
+{{ for need in p.needs.AllNeeds | array.offset 1 -}}{{- if need.CurCategory | string.size > 0 -}}{{ need.Def }}: {{ need.CurCategory}}
+{{ end }}{{ end }}
+
+# {{ p.name }} 的近期记忆:
+{{- for line in (StripFormattingTags p.et_thoughts | string.split nl | array.offset  1) }}
+{{ line }}
+{{- end }}
+{{ p.memory }}
+{{ smart_history }}
+
+# {{ p.name }} 的位置与周围环境:
+位置: {{ p.location }}
+位置美观度: {{ p.beauty }}
+位置地形: {{ p.terrain }}
+位置清洁度: {{ p.cleanliness }}
+周围的事物:
+{{- for line in p.surroundings  | string.split nl}}
+- {{ line }}
+{{- end }}
+{{ end -}}
