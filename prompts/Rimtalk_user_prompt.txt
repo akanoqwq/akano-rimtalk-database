@@ -1,15 +1,20 @@
-[世界观常识/角色背景]
-[**强调**:人设相关内容必须做到一一对应，禁止把A的人设/性格/口癖引用到B上!]
-{{~ knowledge ~}}
-
-[人物档案]
 {{~ # 创建一个nl换行符变量以避免转义 ~}}
 {{~ capture nl ~}}
 {{~ "" }}
 {{~ end ~}}
 
-{{~ for p in pawns ~}}
+<world_knowledge>
+[世界观常识/角色背景]
+{{~ knowledge ~}}
+</world_knowledge>
+<identity_lock_warning>
+[强调：禁止跨角色误用性格]
+你刚刚读取了多个角色的背景与特征。现在，你必须将每个人的“人设性格”、“口癖”、“语言风格”与该角色**绝对绑定**。
+**严格禁止**把角色A的口癖/人设/性格（例如特定的语尾、自称）套用在角色B身上。
+</identity_lock_warning>
 
+{{~ for p in pawns ~}}
+<character_profile>
 {{ p.name }} 的档案: 
 全名: {{ p.fullname }}
 性别: {{ p.gender }}
@@ -55,7 +60,6 @@
 {{ line }}
 {{- end }}
 {{ p.memory }}
-{{ smart_history }}
 
 {{ p.name }} 的位置与周围环境:
 位置: {{ p.location }}
@@ -66,9 +70,15 @@
 {{- for line in p.surroundings  | string.split nl}}
 - {{ line }}
 {{- end }}
+</character_profile>
 {{ end -}}
-
-[殖民地状态]
+<no_trait_leak>
+[再次确认]:每个说话者只用自己的人设和口癖，**严禁**错误使用他人口癖！
+</no_trait_leak>
+<smart_history>
+{{ smart_history }}
+</smart_history>
+<colony_status>
 威胁:
 {{ if eventplus_threats != "" -}}
 {{ eventplus_threats }}
@@ -89,16 +99,16 @@
 {{ else }}
 无活跃任务。
 {{ end -}}
-
-[对话触发场景]
+</colony_status>
+<world_status>
+时间: {{ hour }}时 | 日期: {{ year }} 年 {{ quadrum }} {{ day }} 日, 
+季节: {{ season }} | 天气: {{ map.weather }}
+</world_status>
+<dialogue_scene>
 # 对话触发
 - 人物名单: {{ pawns }}
 - 发起人物: {{ pawn }}
 - 预期接收者: {{ recipient }}
 - 发起人物的意图: {{ ctx.DialogueType | string.split nl | array.first }}
 - 对话主题: {{ ctx.DialogueType | string.split nl | array.offset 1 | array.join " ; " }}
-
-
-# 世界状态
-时间: {{ hour }}时 | 日期: {{ year }} 年 {{ quadrum }} {{ day }} 日, 
-季节: {{ season }} | 天气: {{ map.weather }}
+</dialogue_scene>
